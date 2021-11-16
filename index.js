@@ -1,28 +1,38 @@
 class Producto {
     constructor(tipo, coleccion, estampa, color, stock, precio){
-        const generarId = () => {
-            let id = "";
-            const t = () => {
-                switch(tipo){
-                    case 1:
-                        return "REM-";
-                    case 2:
-                        return "BUZO-";
-                    default:
-                        return "OTRO-";
-                }
-            }
-            id += t();
-            id += `${coleccion.toUpperCase()}:${estampa}-${color}`;
-            return id;
-        }
-        this.id = generarId();
+        // const generarId = () => {
+        //     let id = "";
+        //     const t = () => {
+        //         switch(tipo){
+        //             case 1:
+        //                 return "REM-";
+        //             case 2:
+        //                 return "BUZO-";
+        //             default:
+        //                 return "OTRO-";
+        //         }
+        //     }
+        //     id += t();
+        //     id += `${coleccion.toUpperCase()}:${estampa}-${color}`;
+        //     return id;
+        // }
+        // this.id = generarId();
         this.tipo = tipo;
         this.coleccion = coleccion;
         this.estampa = estampa;
         this.color = color;
         this.stock = stock;
         this.precio = precio;
+    }
+    mapearTipo(){
+        switch (this.tipo){
+            case 1:
+                return "Remera";
+            case 2:
+                return "Buzo";
+            default:
+                return "";
+        }
     }
     agregarStock(cant){
         this.stock += cant;
@@ -41,10 +51,10 @@ class Producto {
 let vProductos = [];
 let vCarrito = [];
 
-vProductos.push(new Producto(1, "simpsons", "homeroArbusto", "verde", 200, 1500));
-vProductos.push(new Producto(1, "simpsons", "hombreRadioactivo", "blanco", 100, 1500));
-vProductos.push(new Producto(1, "simpsons", "hombreRadioactivo", "negro", 150, 1500));
-vProductos.push(new Producto(2, "naruto", "akatsukiLogo", "negro", 79, 3000));
+vProductos.push(new Producto(1, "simpsons", "homero arbusto", "verde", 200, 1500));
+vProductos.push(new Producto(1, "simpsons", "hombre radioactivo", "blanco", 100, 1500));
+vProductos.push(new Producto(1, "simpsons", "hombre radioactivo", "negro", 150, 1500));
+vProductos.push(new Producto(2, "naruto", "akatsuki", "negro", 79, 3000));
 
 
 function agregarProducto(){
@@ -205,4 +215,44 @@ function menu(){
     }while(parseInt(input)!=3);
 }
 
-menu();
+function MostrarVectorProductos(){
+    vProductos.forEach(p => {
+        const content = `
+            <h2>${p.mapearTipo()} ${p.estampa}</h2>
+            <h4>${p.color}</h3>
+            <h3>$${p.mostrarPrecioConIva()}(IVA incl.)</h3>
+            <h5>Cantidad: ${p.stock} </h5>
+            <button type="button">Agregar al carrito</button>            
+        `;
+        let cardNode = document.createElement("div");
+        cardNode.classList.add("card");
+        cardNode.innerHTML = content;
+        document.getElementById("productos").appendChild(cardNode);
+        cardNode.getElementsByTagName("button")[0].addEventListener("click", () => {vCarrito.push(p)});
+    });
+}
+
+function MostrarVectorCarrito(){
+    let total = 0;
+    vCarrito.forEach(p => {
+        const content = `
+            <h3>${p.mapearTipo()} ${p.estampa}</h2>
+            <h5>${p.color}</h3>
+            <h4>$${p.mostrarPrecioConIva()}(IVA incl.)</h3>
+        `;
+        total += p.mostrarPrecioConIva();
+        let cardNode = document.createElement("div");
+        cardNode.classList.add("cart__card");
+        cardNode.innerHTML = content;
+        document.getElementById("carrito").appendChild(cardNode);
+    });
+    verTotal = document.createElement("h2")
+    verTotal.innerHTML = `TOTAL: $${total}`;
+    document.getElementById("carrito").appendChild(verTotal);
+}
+
+
+let productos = document.createElement("div");
+productos.id = "productos";
+document.getElementsByTagName("body")[0].appendChild(productos);
+MostrarVectorProductos();
