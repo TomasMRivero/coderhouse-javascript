@@ -1,54 +1,4 @@
-let prodId = 0;
-
-class Producto {
-    constructor(tipo, coleccion, estampa, color, stock, precio){
-        // const generarId = () => {
-        //     let id = "";
-        //     const t = () => {
-        //         switch(tipo){
-        //             case 1:
-        //                 return "REM-";
-        //             case 2:
-        //                 return "BUZO-";
-        //             default:
-        //                 return "OTRO-";
-        //         }
-        //     }
-        //     id += t();
-        //     id += `${coleccion.toUpperCase()}:${estampa}-${color}`;
-        //     return id;
-        // }
-        this.id = prodId++;
-        this.tipo = tipo;
-        this.coleccion = coleccion;
-        this.estampa = estampa;
-        this.color = color;
-        this.stock = stock;
-        this.precio = precio;
-    }
-    mapearTipo(){
-        switch (this.tipo){
-            case 1:
-                return "Remera";
-            case 2:
-                return "Buzo";
-            default:
-                return "";
-        }
-    }
-    agregarStock(cant){
-        this.stock += cant;
-    }
-    comprar(){
-        this.stock --;
-    }
-    actualizarStock(stockNuevo){
-        this.stock = stockNuevo;
-    }
-    mostrarPrecioConIva(){
-        return this.precio * 1.21;
-    }
-}
+import Producto from "./src/Producto.js";
 
 let vProductos = [];
 let vCarrito = [];
@@ -217,23 +167,6 @@ function menu(){
     }while(parseInt(input)!=3);
 }
 
-function MostrarVectorProductos(){
-    vProductos.forEach((p) => {
-        const content = `
-            <h2>${p.mapearTipo()} ${p.estampa}</h2>
-            <h4>${p.color}</h3>
-            <h3>$${p.mostrarPrecioConIva()}(IVA incl.)</h3>
-            <h5>Cantidad: ${p.stock} </h5>
-            <button type="button" id="btn${p.id}">Agregar al carrito</button>            
-        `;
-        let cardNode = document.createElement("div");
-        cardNode.classList.add("card");
-        cardNode.innerHTML= content;
-        $('#productos').append(cardNode)
-        $(`#btn${p.id}`).on('click', () => {vCarrito.push(p)});
-    });
-}
-
 function MostrarVectorCarrito(){
     let total = 0;
     vCarrito.forEach(p => {
@@ -252,14 +185,6 @@ function MostrarVectorCarrito(){
     verTotal.innerHTML = `TOTAL: $${total}`;
     document.getElementById("carrito").appendChild(verTotal);
 }
-
-$('body').append('<div id="productos"></div>')
-MostrarVectorProductos();
-
-$('body').append(`
-    <input type = "text" id = "test">
-    <button type = "button" id = "testBtn" >Click</button>
-`);
 
 $('#test').on("change", e => console.log(e.target.value));
 $('#testBtn').on('click', () => {
