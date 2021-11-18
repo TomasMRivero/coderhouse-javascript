@@ -1,3 +1,5 @@
+let prodId = 0;
+
 class Producto {
     constructor(tipo, coleccion, estampa, color, stock, precio){
         // const generarId = () => {
@@ -16,7 +18,7 @@ class Producto {
         //     id += `${coleccion.toUpperCase()}:${estampa}-${color}`;
         //     return id;
         // }
-        // this.id = generarId();
+        this.id = prodId++;
         this.tipo = tipo;
         this.coleccion = coleccion;
         this.estampa = estampa;
@@ -216,19 +218,19 @@ function menu(){
 }
 
 function MostrarVectorProductos(){
-    vProductos.forEach(p => {
+    vProductos.forEach((p) => {
         const content = `
             <h2>${p.mapearTipo()} ${p.estampa}</h2>
             <h4>${p.color}</h3>
             <h3>$${p.mostrarPrecioConIva()}(IVA incl.)</h3>
             <h5>Cantidad: ${p.stock} </h5>
-            <button type="button">Agregar al carrito</button>            
+            <button type="button" id="btn${p.id}">Agregar al carrito</button>            
         `;
         let cardNode = document.createElement("div");
         cardNode.classList.add("card");
-        cardNode.innerHTML = content;
-        document.getElementById("productos").appendChild(cardNode);
-        cardNode.getElementsByTagName("button")[0].addEventListener("click", () => {vCarrito.push(p)});
+        cardNode.innerHTML= content;
+        $('#productos').append(cardNode)
+        $(`#btn${p.id}`).on('click', () => {vCarrito.push(p)});
     });
 }
 
@@ -244,15 +246,22 @@ function MostrarVectorCarrito(){
         let cardNode = document.createElement("div");
         cardNode.classList.add("cart__card");
         cardNode.innerHTML = content;
-        document.getElementById("carrito").appendChild(cardNode);
+        $('#carrito').append(cardNode);
     });
     verTotal = document.createElement("h2")
     verTotal.innerHTML = `TOTAL: $${total}`;
     document.getElementById("carrito").appendChild(verTotal);
 }
 
-
-let productos = document.createElement("div");
-productos.id = "productos";
-document.getElementsByTagName("body")[0].appendChild(productos);
+$('body').append('<div id="productos"></div>')
 MostrarVectorProductos();
+
+$('body').append(`
+    <input type = "text" id = "test">
+    <button type = "button" id = "testBtn" >Click</button>
+`);
+
+$('#test').on("change", e => console.log(e.target.value));
+$('#testBtn').on('click', () => {
+    $('#test').trigger('change');
+})
