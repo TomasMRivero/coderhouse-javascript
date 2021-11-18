@@ -3,6 +3,11 @@ import Producto from "./Producto.js";
 let vProductos = [];
 let showProductos = vProductos;
 
+let vCarrito = [];
+let payload = localStorage.getItem("carrito");
+if (localStorage.getItem("carrito"))
+    vCarrito = vCarrito.concat(JSON.parse(payload))
+
 vProductos.push(new Producto(1, "simpsons", "homero arbusto", "verde", 200, 1500));
 vProductos.push(new Producto(1, "simpsons", "hombre radioactivo", "blanco", 100, 1500));
 vProductos.push(new Producto(1, "simpsons", "hombre radioactivo", "negro", 150, 1500));
@@ -22,7 +27,10 @@ function mostrarVectorProductos(){
         cardNode.classList.add("card");
         cardNode.innerHTML= content;
         $('#productos').append(cardNode)
-        $(`#btn${p.id}`).on('click', () => {vCarrito.push(p)});
+        $(`#btn${p.id}`).on('click', () => {
+            vCarrito.push(p);
+            localStorage.setItem("carrito", JSON.stringify(vCarrito));
+        });
     });
     if (!showProductos.length)
         $('#productos').append(`<h3>No se encontraron productos</h3>`)
