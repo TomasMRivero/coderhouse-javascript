@@ -8,7 +8,8 @@ vProductos.push(new Producto(1, "simpsons", "hombre radioactivo", "blanco", 100,
 vProductos.push(new Producto(1, "simpsons", "hombre radioactivo", "negro", 150, 1500));
 vProductos.push(new Producto(2, "naruto", "akatsuki", "negro", 79, 3000));
 
-function MostrarVectorProductos(){
+function mostrarVectorProductos(){
+    $('body').append('<div id="productos"></div>');
     showProductos.forEach((p) => {
         const content = `
             <h2>${p.mapearTipo()} ${p.estampa}</h2>
@@ -26,38 +27,37 @@ function MostrarVectorProductos(){
     if (!showProductos.length)
         $('#productos').append(`<h3>No se encontraron productos</h3>`)
 }
-
-$('body').append(`
-    <div id="busqueda"></div>
-    <div id="productos"></div>
-`);
-$('#busqueda').prepend(`
-    <form id="searchForm">
-        <input type="text" placeholder="Buscar por..." id="searchTerm">
-        <select id="filtro">
-            <option value="1">Estampa</option>
-            <option value="2">Colección</option>
-        </select>
-        <button type="submit" id="search">Buscar</button>
-    </form>
-`);
-$('#busqueda').append(`
-    <div id="tipo">
-        <p>Mostrar:
-        <input type="checkbox" id="remera" value="1" name="remera" checked="true">
-        <label for="remera">remeras</label>
-        <input type="checkbox" id="buzo" value="2" name="buzo" checked="true">
-        <label for="buzo">buzos</label>
-        <input type="checkbox" id="otros" value="3" name="otros" checked="true">
-        <label for="otros">otros</label>
-        </p>
-`);
-
-
-let i = 0;
-$('#searchForm').on("submit", e=>{
-    e.preventDefault();
+function barraDeBusqueda(){
+    $('body').append('<div id="busqueda"></div>');
     let term = '';
+    $('#busqueda').prepend(`
+        <form id="searchForm">
+            <input type="text" placeholder="Buscar por..." id="searchTerm">
+            <select id="filtro">
+                <option value="1">Estampa</option>
+                <option value="2">Colección</option>
+            </select>
+            <button type="submit" id="search">Buscar</button>
+        </form>
+    `).append(`
+        <div id="tipo">
+            <p>Mostrar:
+            <input type="checkbox" id="remera" value="1" name="remera" checked="true">
+            <label for="remera">remeras</label>
+            <input type="checkbox" id="buzo" value="2" name="buzo" checked="true">
+            <label for="buzo">buzos</label>
+            <input type="checkbox" id="otros" value="3" name="otros" checked="true">
+            <label for="otros">otros</label>
+            </p>
+    `);
+    $('#busqueda :checkbox').on("change", e => {
+        if(e.target.checked)
+            showProductos = showProductos.concat(vProductos.filter(p => p.tipo === parseInt(e.target.value)));
+        else
+            showProductos = showProductos.filter(p => p.tipo != parseInt(e.target.value));
+        $('#productos').empty();  
+        mostrarVectorProductos();
+    });
 
     $('#filtro').on('search', e => {
         switch(parseInt(e.target.value)){
@@ -68,22 +68,25 @@ $('#searchForm').on("submit", e=>{
                 showProductos = vProductos.filter(e => e.coleccion.includes(term));
                 break;
         }
-    })
+    })    
     $('#searchTerm').on("search", e => {
-        console.log(++i)
         term = e.target.value;
+        e.target.value = ''
     });
-    $('#searchTerm').trigger('search');
-
-    if(!term){
-        showProductos = vProductos;
-    }
-    else{
-        //$('#filtro').trigger('search');
-    }
+    $('#searchForm').on("submit", e=>{
+        e.preventDefault();
+        $('#searchTerm').trigger('search');
     
-    $('#productos').empty();  
-    MostrarVectorProductos();
-});
-
-MostrarVectorProductos();
+        if(!term){
+            showProductos = vProductos;
+        }
+        else{
+            $('#filtro').trigger('search');
+        }
+        
+        $('#productos').empty();  
+        mostrarVectorProductos();
+    });
+}
+barraDeBusqueda();
+mostrarVectorProductos();
