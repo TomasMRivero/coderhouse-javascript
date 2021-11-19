@@ -1,14 +1,15 @@
 let prodId = 0;
 
 export default class Producto {
-    constructor(tipo, coleccion, estampa, color, stock, precio){
+    //recibe obj con tipo, coleccion, estampa, color, stock, precio
+    constructor(obj){
         this.id = this.setId()
-        this.tipo = tipo;
-        this.coleccion = coleccion;
-        this.estampa = estampa;
-        this.color = color;
-        this.stock = stock;
-        this.precio = precio;
+        this.tipo = obj.tipo;
+        this.coleccion = obj.coleccion;
+        this.estampa = obj.estampa;
+        this.color = obj.color;
+        this.stock = obj.stock;
+        this.precio = obj.precio;
     }
     setId(){
         sessionStorage.setItem("prodId", `${prodId}`)

@@ -8,10 +8,10 @@ let payload = localStorage.getItem("carrito");
 if (localStorage.getItem("carrito"))
     vCarrito = vCarrito.concat(JSON.parse(payload))
 
-vProductos.push(new Producto(1, "simpsons", "homero arbusto", "verde", 200, 1500));
-vProductos.push(new Producto(1, "simpsons", "hombre radioactivo", "blanco", 100, 1500));
-vProductos.push(new Producto(1, "simpsons", "hombre radioactivo", "negro", 150, 1500));
-vProductos.push(new Producto(2, "naruto", "akatsuki", "negro", 79, 3000));
+vProductos.push(new Producto({tipo: 1, coleccion: "simpsons", estampa: "homero arbusto", color: "verde", stock: 200, precio: 1500}));
+vProductos.push(new Producto({tipo: 1, coleccion: "simpsons", estampa: "hombre radioactivo", color: "blanco", stock: 100, precio: 1500}));
+vProductos.push(new Producto({tipo: 1, coleccion: "simpsons", estampa: "hombre radioactivo", color: "negro", stock: 150, precio: 1500}));
+vProductos.push(new Producto({tipo: 2, coleccion: "naruto", estampa: "akatsuki", color: "negro", stock: 79, precio: 3000}));
 
 function mostrarVectorProductos(){
     $('body').append('<div id="productos"></div>');
@@ -96,5 +96,7 @@ function barraDeBusqueda(){
         mostrarVectorProductos();
     });
 }
+
+
 barraDeBusqueda();
 mostrarVectorProductos();
