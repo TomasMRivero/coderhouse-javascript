@@ -16,7 +16,6 @@ if (prodPayload){
 else
     await getProductos();
 
-console.log(vProductos)
 let showProductos = vProductos;
 
 let vCarrito = [];
@@ -25,13 +24,12 @@ if (cartPayload)
     vCarrito = vCarrito.concat(JSON.parse(cartPayload))
 
 function mostrarVectorProductos(){
-    $('body').append('<div id="productos"></div>');
     showProductos.forEach((p) => {
         const content = `
             <h2>${p.mapearTipo()} ${p.estampa}</h2>
             <h4>${p.color}</h3>
+            <h4>Cantidad: ${p.stock} </h5>
             <h3>$${p.mostrarPrecioConIva()}(IVA incl.)</h3>
-            <h5>Cantidad: ${p.stock} </h5>
             <button type="button" id="btn${p.id}">Agregar al carrito</button>            
         `;
         let cardNode = document.createElement("div");
@@ -41,26 +39,26 @@ function mostrarVectorProductos(){
         $(`#btn${p.id}`).on('click', () => {
             vCarrito.push(p);
             localStorage.setItem("carrito", JSON.stringify(vCarrito));
-            $('#cartCount').html(`(${vCarrito.length})`);
+            $('#cartCount').show();
+            $('#cartCount').html(`${vCarrito.length}`);
         });
     });
     if (!showProductos.length)
         $('#productos').append(`<h3>No se encontraron productos</h3>`)
 }
 function barraDeBusqueda(){
-    $('body').append('<div id="busqueda"></div>');
     let term = '';
     $('#busqueda').prepend(`
-        <form id="searchForm">
-            <input type="text" placeholder="Buscar por..." id="searchTerm">
-            <select id="filtro">
+        <form class="busqueda__container" id="searchForm">
+            <input class="busqueda__field" type="text" placeholder="Buscar por..." id="searchTerm">
+            <select class="busqueda__filter" id="filtro">
                 <option value="1">Estampa</option>
                 <option value="2">Colección</option>
             </select>
-            <button type="submit" id="search">Buscar</button>
+            <button class="busqueda__submit" type="submit" id="search">Buscar</button>
         </form>
     `).append(`
-        <div id="tipo">
+        <div class="busqueda__checkbox" id="tipo">
             <p>Mostrar:
             <input type="checkbox" id="remera" value="1" name="remera" checked="true">
             <label for="remera">remeras</label>
@@ -75,6 +73,7 @@ function barraDeBusqueda(){
             showProductos = showProductos.concat(vProductos.filter(p => p.tipo === parseInt(e.target.value)));
         else
             showProductos = showProductos.filter(p => p.tipo != parseInt(e.target.value));
+        showProductos.sort((a,b)=>{return a.id>b.id?1:-1});
         $('#productos').empty();  
         mostrarVectorProductos();
     });
@@ -108,8 +107,15 @@ function barraDeBusqueda(){
         mostrarVectorProductos();
     });
 }
+$('#cartCount').hide();
 
+$('body').append('<div class="busqueda" id="busqueda"></div>');
+
+$('body').append('<div class="container" id="productos"></div>');
 
 barraDeBusqueda();
 mostrarVectorProductos();
-$('#cartCount').html(`(${vCarrito.length})`);
+if(vCarrito.length){
+    $('#cartCount').show()
+    $('#cartCount').html(`${vCarrito.length}`);
+}

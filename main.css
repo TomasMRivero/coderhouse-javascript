@@ -1,0 +1,109 @@
+* {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-family: "Courier New", Courier, monospace;
+	box-sizing: border-box;
+}
+body {
+	padding-top: 10px;
+	width: 80%;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	margin: auto;
+}
+
+a {
+	padding: 10px;
+	border: 1px solid black;
+	text-decoration: none;
+	color: black;
+	transition: 0.4s;
+}
+a:hover {
+	background-color: #f0f0f0;
+}
+a span {
+	width: 1.2rem;
+	height: 1.2rem;
+	margin-left: 0.3rem;
+	display: inline-block;
+	background-color: #ffbbee;
+	border-radius: 100%;
+	text-align: center;
+}
+
+.busqueda {
+	align-self: stretch;
+	display: flex;
+	flex-direction: column;
+	align-items: stretch;
+	border-bottom: 1px solid black;
+}
+.busqueda__container {
+	margin: 10px;
+	background-color: blueviolet;
+	display: flex;
+	border: 2px solid black;
+}
+.busqueda__field,
+.busqueda__filter,
+.busqueda__submit {
+	flex-grow: 1.5;
+	padding: 5px;
+	border: 1px solid #f0f0f0;
+	background-color: white;
+	transition: 0.4s;
+}
+.busqueda__field {
+	flex-grow: 7;
+}
+.busqueda__submit:hover {
+	background-color: #f0f0f0;
+}
+.busqueda__checkbox {
+	margin: 10px;
+	margin-top: 0;
+	display: flex;
+	justify-content: center;
+}
+
+.container {
+	padding: 15px;
+	display: flex;
+	flex-direction: column;
+}
+
+.card {
+	min-width: 50%;
+	padding: 10px;
+	margin: 10px;
+	display: flex;
+	flex-flow: row wrap;
+	align-items: flex-start;
+	border: 1px solid black;
+}
+.card > * {
+	margin: 5px;
+}
+.card h2,
+.card button {
+	width: 100%;
+	align-self: center;
+}
+.card h3 {
+	width: 100%;
+}
+.card h4 {
+	flex: 1;
+}
+.card button {
+	background-color: #fff;
+	padding: 10px;
+	border: 1px solid black;
+	transition: 0.4s;
+}
+.card button:hover {
+	background-color: #f0f0f0;
+}

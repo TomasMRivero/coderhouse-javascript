@@ -27,7 +27,6 @@ vCarrito.forEach(p => precioFinal += p.mostrarPrecioConIva())
 
 
 function mostrarVectorCarrito(){
-    $('body').append('<div id="carrito"></div>');
     vCarrito.forEach((p) => {
         const content = `
             <h2>${p.mapearTipo()} ${p.estampa}</h2>
@@ -47,13 +46,13 @@ function mostrarVectorCarrito(){
     }
 }
 
+$('body').append('<div class="container" id="carrito"></div>');
 mostrarVectorCarrito();
 
 $(`#buybtn`).on('click', () => {
     if (confirm(`El precio final es ${precioFinal}. Desea confirmar?`)){
         $.each(vCarrito, () => {
             const item = vCarrito.shift();
-            console.log(item);
             let i = vProductos.findIndex(e => e.id === item.prodId);
             vProductos[i].comprar();
         })
@@ -63,5 +62,3 @@ $(`#buybtn`).on('click', () => {
     $('#carrito').empty();  
     mostrarVectorCarrito();
 });
-console.log(vProductos);
-console.log(vCarrito);
