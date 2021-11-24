@@ -1,17 +1,28 @@
 import Producto from "./Producto.js";
 
+async function getProductos() {
+    await $.get("./productos.json", (res, status) => {
+        if(status === "success")
+            res.forEach(e=> vProductos.push(new Producto(e)))
+    });
+    localStorage.setItem("productos", JSON.stringify(vProductos));
+}
+
 let vProductos = [];
+let prodPayload = localStorage.getItem("productos");
+if (prodPayload){
+    JSON.parse(prodPayload).forEach(e => vProductos.push(new Producto(e)));
+}
+else
+    await getProductos();
+
+console.log(vProductos)
 let showProductos = vProductos;
 
 let vCarrito = [];
-let payload = localStorage.getItem("carrito");
-if (localStorage.getItem("carrito"))
-    vCarrito = vCarrito.concat(JSON.parse(payload))
-
-vProductos.push(new Producto({tipo: 1, coleccion: "simpsons", estampa: "homero arbusto", color: "verde", stock: 200, precio: 1500}));
-vProductos.push(new Producto({tipo: 1, coleccion: "simpsons", estampa: "hombre radioactivo", color: "blanco", stock: 100, precio: 1500}));
-vProductos.push(new Producto({tipo: 1, coleccion: "simpsons", estampa: "hombre radioactivo", color: "negro", stock: 150, precio: 1500}));
-vProductos.push(new Producto({tipo: 2, coleccion: "naruto", estampa: "akatsuki", color: "negro", stock: 79, precio: 3000}));
+let cartPayload = localStorage.getItem("carrito");
+if (cartPayload)
+    vCarrito = vCarrito.concat(JSON.parse(cartPayload))
 
 function mostrarVectorProductos(){
     $('body').append('<div id="productos"></div>');
@@ -30,6 +41,7 @@ function mostrarVectorProductos(){
         $(`#btn${p.id}`).on('click', () => {
             vCarrito.push(p);
             localStorage.setItem("carrito", JSON.stringify(vCarrito));
+            $('#cartCount').html(`(${vCarrito.length})`);
         });
     });
     if (!showProductos.length)
@@ -100,3 +112,4 @@ function barraDeBusqueda(){
 
 barraDeBusqueda();
 mostrarVectorProductos();
+$('#cartCount').html(`(${vCarrito.length})`);

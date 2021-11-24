@@ -1,9 +1,7 @@
-let prodId = 0;
-
 export default class Producto {
     //recibe obj con tipo, coleccion, estampa, color, stock, precio
     constructor(obj){
-        this.id = this.setId()
+        this.id = obj.id
         this.tipo = obj.tipo;
         this.coleccion = obj.coleccion;
         this.estampa = obj.estampa;
@@ -11,9 +9,9 @@ export default class Producto {
         this.stock = obj.stock;
         this.precio = obj.precio;
     }
-    setId(){
-        sessionStorage.setItem("prodId", `${prodId}`)
-        return prodId++;
+    setId(dest, n){
+        sessionStorage.setItem(dest, `${n}`)
+        return n;
     }
     mapearTipo(){
         switch (this.tipo){

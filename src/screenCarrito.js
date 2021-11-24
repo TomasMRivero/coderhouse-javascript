@@ -1,12 +1,30 @@
+import Cartitem from "./CartItem.js";
 import Producto from "./Producto.js";
 
 let vCarrito = [];
-let precioFinal = 0;
 let payload = localStorage.getItem("carrito");
 if (payload)
-    JSON.parse(payload).forEach(e => vCarrito.push(new Producto(e)));
+JSON.parse(payload).forEach(e => vCarrito.push(new Cartitem(e)));
 
-console.log(vCarrito);
+async function getProductos() {
+    await $.get("./productos.json", (res, status) => {
+        if(status === "success")
+            res.forEach(e=> vProductos.push(new Producto(e)))
+    });
+    localStorage.setItem("productos", JSON.stringify(vProductos));
+}
+
+let vProductos = [];
+let prodPayload = localStorage.getItem("productos");
+if (prodPayload){
+    JSON.parse(prodPayload).forEach(e => vProductos.push(new Producto(e)));
+}
+else
+    await getProductos();
+
+let precioFinal = 0;
+vCarrito.forEach(p => precioFinal += p.mostrarPrecioConIva())
+
 
 function mostrarVectorCarrito(){
     $('body').append('<div id="carrito"></div>');
@@ -24,6 +42,7 @@ function mostrarVectorCarrito(){
     if (!vCarrito.length)
         $('#carrito').append(`<h3>Tu carrito está vacío!</h3>`)
     else {
+        $('#carrito').append(`<h3>Precio final = $${precioFinal}`);
         $('#carrito').append(`<button type="button" id="buybtn">Realizar Compra</button>`);
     }
 }
@@ -31,14 +50,18 @@ function mostrarVectorCarrito(){
 mostrarVectorCarrito();
 
 $(`#buybtn`).on('click', () => {
-    vCarrito.forEach(p => precioFinal += p.mostrarPrecioConIva())
     if (confirm(`El precio final es ${precioFinal}. Desea confirmar?`)){
         $.each(vCarrito, () => {
-            vCarrito.shift();
-            //cuando se haga la conexion con una api va a restar del stock total a los productos.
+            const item = vCarrito.shift();
+            console.log(item);
+            let i = vProductos.findIndex(e => e.id === item.prodId);
+            vProductos[i].comprar();
         })
         localStorage.removeItem("carrito");
+        localStorage.setItem("productos", JSON.stringify(vProductos));
     }
     $('#carrito').empty();  
     mostrarVectorCarrito();
 });
+console.log(vProductos);
+console.log(vCarrito);
