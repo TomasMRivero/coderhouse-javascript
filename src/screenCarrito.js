@@ -22,21 +22,23 @@ if (prodPayload){
 else
     await getProductos();
 
-let precioFinal = 0;
-vCarrito.forEach(p => precioFinal += p.mostrarPrecioConIva())
+let precioFinal;
 
 
 function mostrarVectorCarrito(){
+    precioFinal = 0;
     vCarrito.forEach((p) => {
+        precioFinal += p.mostrarPrecioConIva()
         const content = `
             <h2>${p.mapearTipo()} ${p.estampa}</h2>
             <h4>${p.color}</h3>
-            <h3>$${p.mostrarPrecioConIva()}(IVA incl.)</h3>      
+            <h3>$${p.mostrarPrecioConIva()}(IVA incl.)</h3>  
+            <button type="button" class="removebtn" id="${p.id}">Quitar del carrito</button>     
         `;
         let cardNode = document.createElement("div");
         cardNode.classList.add("card");
         cardNode.innerHTML= content;
-        $('#carrito').append(cardNode)
+        $('#carrito').append(cardNode);
     });
     if (!vCarrito.length)
         $('#carrito').append(`<h3>Tu carrito está vacío!</h3>`)
@@ -44,21 +46,30 @@ function mostrarVectorCarrito(){
         $('#carrito').append(`<h3>Precio final = $${precioFinal}`);
         $('#carrito').append(`<button type="button" id="buybtn">Realizar Compra</button>`);
     }
+
+    $(`#buybtn`).on('click', () => {
+        if (confirm(`El precio final es ${precioFinal}. Desea confirmar?`)){
+            $.each(vCarrito, () => {
+                const item = vCarrito.shift();
+                let i = vProductos.findIndex(e => e.id === item.prodId);
+                vProductos[i].comprar();
+            })
+            localStorage.removeItem("carrito");
+            localStorage.setItem("productos", JSON.stringify(vProductos));
+        }
+        $('#carrito').empty();  
+        mostrarVectorCarrito();
+    });
+    $(`.removebtn`).on('click', (e) => {
+        vCarrito = vCarrito.filter(p => p.id != parseInt(e.target.id));
+        localStorage.setItem("carrito", JSON.stringify(vCarrito));
+        $('#carrito').empty();
+        mostrarVectorCarrito();
+    });
 }
 
-$('body').append('<div class="container" id="carrito"></div>');
-mostrarVectorCarrito();
 
-$(`#buybtn`).on('click', () => {
-    if (confirm(`El precio final es ${precioFinal}. Desea confirmar?`)){
-        $.each(vCarrito, () => {
-            const item = vCarrito.shift();
-            let i = vProductos.findIndex(e => e.id === item.prodId);
-            vProductos[i].comprar();
-        })
-        localStorage.removeItem("carrito");
-        localStorage.setItem("productos", JSON.stringify(vProductos));
-    }
-    $('#carrito').empty();  
-    mostrarVectorCarrito();
-});
+$('body').append('<div class="container" id="carrito"></div>');
+
+
+mostrarVectorCarrito();
