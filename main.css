@@ -14,14 +14,19 @@ body {
 	margin: auto;
 }
 
-a {
+a,
+#buybtn {
+	align-self: center;
+	width: fit-content;
+	background-color: white;
 	padding: 10px;
 	border: 1px solid black;
 	text-decoration: none;
 	color: black;
 	transition: 0.4s;
 }
-a:hover {
+a:hover,
+#buybtn:hover {
 	background-color: #f0f0f0;
 }
 a span {
@@ -43,7 +48,6 @@ a span {
 }
 .busqueda__container {
 	margin: 10px;
-	background-color: blueviolet;
 	display: flex;
 	border: 2px solid black;
 }
@@ -106,4 +110,9 @@ a span {
 }
 .card button:hover {
 	background-color: #f0f0f0;
+}
+
+.container > h3 {
+	margin: 15px;
+	align-self: center;
 }
