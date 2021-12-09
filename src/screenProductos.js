@@ -1,3 +1,4 @@
+import Cartitem from "./CartItem.js";
 import Producto from "./Producto.js";
 
 async function getProductos() {
@@ -21,7 +22,7 @@ let showProductos = vProductos;
 let vCarrito = [];
 let cartPayload = localStorage.getItem("carrito");
 if (cartPayload)
-    vCarrito = vCarrito.concat(JSON.parse(cartPayload))
+JSON.parse(cartPayload).forEach(e => vCarrito.push(new Cartitem(e)));
 
 function mostrarVectorProductos(){
     showProductos.forEach((p) => {
@@ -35,13 +36,15 @@ function mostrarVectorProductos(){
         let cardNode = document.createElement("div");
         cardNode.classList.add("card");
         cardNode.innerHTML= content;
-        $('#productos').append(cardNode)
-        $(`#btn${p.id}`).on('click', () => {
-            vCarrito.push(p);
-            localStorage.setItem("carrito", JSON.stringify(vCarrito));
-            $('#cartCount').show();
-            $('#cartCount').html(`${vCarrito.length}`);
-        });
+        $('#productos').append(cardNode);
+        p.stock
+            ?   $(`#btn${p.id}`).on('click', () => {
+                vCarrito.push(p);
+                localStorage.setItem("carrito", JSON.stringify(vCarrito));
+                $('#cartCount').show();
+                $('#cartCount').html(`${vCarrito.length}`);
+                })
+            :   $(`#btn${p.id}`).attr('disabled','disabled')
     });
     if (!showProductos.length)
         $('#productos').append(`<h3>No se encontraron productos</h3>`)

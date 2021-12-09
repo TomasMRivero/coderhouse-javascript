@@ -45,6 +45,7 @@ function mostrarVectorCarrito(){
     else {
         $('#carrito').append(`<h3>Precio final = $${precioFinal}`);
         $('#carrito').append(`<button type="button" id="buybtn">Realizar Compra</button>`);
+        $('#carrito').append(`<button type="button" id="clearbtn">Vaciar Carrito</button>`);
     }
 
     $(`#buybtn`).on('click', () => {
@@ -59,6 +60,11 @@ function mostrarVectorCarrito(){
         }
         $('#carrito').empty();  
         mostrarVectorCarrito();
+    });
+    $('#clearbtn').on('click', () => {
+        localStorage.removeItem("carrito");
+        vCarrito = [];
+        $('#carrito').empty();  
     });
     $(`.removebtn`).on('click', (e) => {
         vCarrito = vCarrito.filter(p => p.id != parseInt(e.target.id));

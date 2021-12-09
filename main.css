@@ -15,7 +15,8 @@ body {
 }
 
 a,
-#buybtn {
+#buybtn,
+#clearbtn {
 	align-self: center;
 	width: fit-content;
 	background-color: white;
@@ -26,7 +27,8 @@ a,
 	transition: 0.4s;
 }
 a:hover,
-#buybtn:hover {
+#buybtn:hover,
+#clearbtn:hover {
 	background-color: #f0f0f0;
 }
 a span {
